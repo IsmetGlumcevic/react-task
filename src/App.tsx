@@ -3,9 +3,10 @@ import './App.css';
 import ChartTvl from './components/chartTvl';
 import ChartApr from './components/chartApr';
 import type { Asset, SelectedFarm, History } from "./types/types";
+import useWindowDimensions from './components/hooks/getWindowDimensions';
 
 function App() {
-
+  const { height, width } = useWindowDimensions();
   const [isLoading, setLoading] = useState(true);
   const [assets, setAssets] = useState<Asset[]>([]);
   const [asset, setAsset] = useState<Asset | undefined>();
@@ -22,7 +23,7 @@ function App() {
       setAssets(assetData);
       setAsset(oneAsset);
       setSelectedFarm(farm);
-      if(farm) {
+      if (farm) {
         const tvlData: History[] = farm?.tvlStakedHistory;
         setTvl(tvlData);
       }
@@ -40,12 +41,9 @@ function App() {
   return (
     <div className="App">
       {isLoading ? <h1>Loading...</h1> : (
-        <div>
-          {asset?.assetId}, {selectedFarm?.farmId}
-          <div>
-            <ChartTvl data={tvl} />
-            <ChartApr />
-          </div>
+        <div className={'ChartBox' + (width < 1550 ? ' ChartFullWidth' : '')}>
+          <ChartTvl data={tvl} />
+          <ChartApr />
         </div>
       )}
     </div>

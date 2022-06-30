@@ -89,7 +89,7 @@ function ChartApr() {
   };
 
   const renderLineChart = (
-    <LineChart width={1400} height={550} data={data}
+    <LineChart width={1000} height={550} data={data}
       margin={{ top: 15, right: 10, left: 50, bottom: 5 }}
     >
       <CartesianGrid strokeDasharray="3 3" />
@@ -98,19 +98,50 @@ function ChartApr() {
         tickFormatter={dateFormatter}
         domain={[data[0].month, data[data.length - 1].month]}
       />
-      <YAxis tickFormatter={toPercent} />
+      <YAxis
+        tickFormatter={toPercent}
+        domain={[0, 100]}
+      />
       <Tooltip />
       <Legend />
       <Line type="monotone" dataKey="a" stroke="#8884d8" />
+      <Area type="monotone" dataKey="a" stroke="#8884d8" fillOpacity={1} fill="url(#colorUv)" />
     </LineChart>
   );
 
-  return (
-    <div className="Chart">
-      <h3>Asset APR</h3>
-      <div>{renderLineChart}</div>
-    </div>
+  const renderAreaChart = (
+    <AreaChart width={750} height={400} data={data}
+      margin={{ top: 10, right: 30, left: 0, bottom: 0 }}>
+      <defs>
+        <linearGradient id="colorUv" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="5%" stopColor="#3a5682" stopOpacity={0.7}/>
+          <stop offset="95%" stopColor="#3a5682" stopOpacity={0.7}/>
+        </linearGradient>
+      </defs>
+      <XAxis
+        dataKey="month"
+        color={'#fff'}
+        tickFormatter={dateFormatter}
+        domain={[data[0].month, data[data.length - 1].month]}
+        tick={{ fill: 'white' }} 
+      />
+      <YAxis
+        tickFormatter={toPercent}
+        domain={[0, 100]}
+        tick={{ fill: 'white' }} 
+      />
+      <CartesianGrid strokeDasharray="3 3" />
+      <Tooltip />
+      <Area type="monotone" dataKey="a" stroke="#bd4ce5" fillOpacity={1} fill="url(#colorUv)" />
+    </AreaChart>
   );
+
+return (
+  <div className="Chart">
+    <h3 className="ChartTitle">Asset APR</h3>
+    <div>{renderAreaChart}</div>
+  </div>
+);
 }
 
 export default ChartApr;
